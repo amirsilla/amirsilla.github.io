@@ -369,7 +369,7 @@
         </ul>
       </div>
     </div>
-    <button class="btn-primary" onclick="openModal('experience')" style="margin-top:1rem">+ Add Experience</button>
+    
   </div>
 </section>
 
@@ -484,7 +484,7 @@
         <h2 class="section-title">Projects</h2>
         <div class="divider" style="margin-bottom:0"></div>
       </div>
-      <button class="btn-primary" onclick="openModal('project')">+ Add Project</button>
+      
     </div>
     <div class="projects-grid reveal" id="projectsGrid">
       <div class="project-card">
@@ -527,10 +527,7 @@
           </div>
         </div>
       </div>
-      <button class="add-card" onclick="openModal('project')">
-        <div class="add-icon">＋</div>
-        <p>Add New Project</p>
-      </button>
+
     </div>
   </div>
 </section>
@@ -544,7 +541,7 @@
         <h2 class="section-title">Certificates</h2>
         <div class="divider" style="margin-bottom:0"></div>
       </div>
-      <button class="btn-primary" onclick="openModal('certificate')">+ Add Certificate</button>
+      
     </div>
     <div class="certs-grid reveal" id="certsGrid">
       <div class="cert-card">
@@ -565,10 +562,7 @@
           <span class="cert-verified">✓ Verified</span>
         </div>
       </div>
-      <button class="add-card" onclick="openModal('certificate')" style="min-height:100px">
-        <div class="add-icon">＋</div>
-        <p>Add Certificate</p>
-      </button>
+
     </div>
   </div>
 </section>
@@ -670,12 +664,6 @@
   <p>© 2025 <span>Amir Shahzad</span> · Data Analyst · Bahawalpur, Pakistan · All rights reserved</p>
 </footer>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="modalBox">
-    <h3 id="modalTitle">Add Item</h3>
-    <p id="modalDesc">Fill in the details below.</p>
-    <div class="modal-form" id="modalFormContent"></div>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-save" onclick="saveItem()">Save & Add ✓</button>
@@ -709,104 +697,7 @@
     } else { nl.style.display = 'none'; }
   }
 
-  // MODAL
-  let currentType = 'project';
-  function openModal(type) {
-    currentType = type;
-    const overlay = document.getElementById('modalOverlay');
-    const title = document.getElementById('modalTitle');
-    const desc = document.getElementById('modalDesc');
-    const form = document.getElementById('modalFormContent');
-    if(type === 'project') {
-      title.textContent = 'Add New Project';
-      desc.textContent = 'Fill in the details to add a project to your portfolio.';
-      form.innerHTML = `
-        <div><label>Project Title</label><input id="f1" placeholder="e.g. Sales Forecasting Model"/></div>
-        <div><label>Description</label><textarea id="f2" placeholder="What did you build and why?"></textarea></div>
-        <div><label>Tech Tags (comma-separated)</label><input id="f3" placeholder="Python, Power BI, SQL"/></div>
-        <div><label>Demo / Live URL (optional)</label><input id="f4" placeholder="https://..."/></div>
-        <div><label>GitHub URL (optional)</label><input id="f5" placeholder="https://github.com/..."/></div>
-        <div><label>Emoji Icon</label>
-          <select id="f6"><option>📊</option><option>🤖</option><option>🧠</option><option>📈</option><option>🔍</option><option>🧹</option><option>⚡</option><option>🌐</option><option>📉</option></select>
-        </div>`;
-    } else if(type === 'certificate') {
-      title.textContent = 'Add Certificate';
-      desc.textContent = 'Document a new learning achievement.';
-      form.innerHTML = `
-        <div><label>Certificate Title</label><input id="f1" placeholder="e.g. Machine Learning Specialization"/></div>
-        <div><label>Issuing Organization</label><input id="f2" placeholder="e.g. Coursera · Stanford"/></div>
-        <div><label>Date Earned</label><input id="f3" type="month"/></div>
-        <div><label>Credential URL (optional)</label><input id="f4" placeholder="https://..."/></div>
-        <div><label>Badge Color</label>
-          <select id="f5"><option value="gold">Gold 🏆</option><option value="blue">Blue 🎓</option><option value="green">Green ✅</option></select>
-        </div>`;
-    } else if(type === 'experience') {
-      title.textContent = 'Add Experience';
-      desc.textContent = 'Add a new role or internship.';
-      form.innerHTML = `
-        <div><label>Job Title</label><input id="f1" placeholder="e.g. Data Analyst"/></div>
-        <div><label>Company</label><input id="f2" placeholder="e.g. XYZ Corp"/></div>
-        <div><label>Duration</label><input id="f3" placeholder="e.g. Jan 2025 – Present"/></div>
-        <div><label>Key Achievement 1</label><input id="f4" placeholder="What did you accomplish?"/></div>
-        <div><label>Key Achievement 2 (optional)</label><input id="f5" placeholder="Another achievement..."/></div>
-        <div><label>Key Achievement 3 (optional)</label><input id="f6" placeholder="Another achievement..."/></div>`;
-    }
-    overlay.classList.add('open');
-  }
-  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-  function closeModalOutside(e) { if(e.target.id === 'modalOverlay') closeModal(); }
 
-  function saveItem() {
-    if(currentType === 'project') {
-      const title = document.getElementById('f1').value.trim() || 'New Project';
-      const desc = document.getElementById('f2').value.trim() || 'Project description.';
-      const tags = (document.getElementById('f3').value || 'Python').split(',').map(t=>t.trim()).filter(Boolean);
-      const demo = document.getElementById('f4').value.trim();
-      const gh = document.getElementById('f5').value.trim();
-      const emoji = document.getElementById('f6').value;
-      const thumbClasses = ['t1','t2','t3','t4'];
-      const cls = thumbClasses[projects % 4];
-      const tagsHtml = tags.map(t=>`<span class="project-tag">${t}</span>`).join('');
-      const demoBtn = demo ? `<a href="${demo}" class="proj-link primary" target="_blank">Live Demo</a>` : '';
-      const ghBtn = gh ? `<a href="${gh}" class="proj-link secondary" target="_blank">GitHub</a>` : '';
-      const card = document.createElement('div');
-      card.className = 'project-card';
-      card.innerHTML = `<div class="project-thumb ${cls}">${emoji}</div><div class="project-body"><div class="project-meta">${tagsHtml}</div><h3>${title}</h3><p>${desc}</p><div class="project-footer">${demoBtn}${ghBtn}</div></div>`;
-      const grid = document.getElementById('projectsGrid');
-      grid.insertBefore(card, grid.lastElementChild);
-      projects++;
-      document.getElementById('projCount').textContent = projects;
-    } else if(currentType === 'certificate') {
-      const title = document.getElementById('f1').value.trim() || 'New Certificate';
-      const issuer = document.getElementById('f2').value.trim() || 'Platform';
-      const dateRaw = document.getElementById('f3').value;
-      const color = document.getElementById('f5').value;
-      const icons = {gold:'🏆',blue:'🎓',green:'✅'};
-      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      let dateStr = '';
-      if(dateRaw) { const [y,m] = dateRaw.split('-'); dateStr = months[parseInt(m)-1]+' '+y; }
-      const card = document.createElement('div');
-      card.className = 'cert-card';
-      card.innerHTML = `<div class="cert-icon ${color}">${icons[color]}</div><div class="cert-info"><h4>${title}</h4><div class="issuer">${issuer}</div>${dateStr?`<span class="cert-date">📅 ${dateStr}</span>`:''}<span class="cert-verified">✓ Verified</span></div>`;
-      const grid = document.getElementById('certsGrid');
-      grid.insertBefore(card, grid.lastElementChild);
-      certs++;
-      document.getElementById('certCount').textContent = certs;
-    } else if(currentType === 'experience') {
-      const title = document.getElementById('f1').value.trim() || 'New Role';
-      const company = document.getElementById('f2').value.trim() || 'Company';
-      const duration = document.getElementById('f3').value.trim() || '';
-      const a1 = document.getElementById('f4').value.trim();
-      const a2 = document.getElementById('f5').value.trim();
-      const a3 = document.getElementById('f6').value.trim();
-      const bullets = [a1,a2,a3].filter(Boolean).map(a=>`<li>${a}</li>`).join('');
-      const card = document.createElement('div');
-      card.className = 'exp-card';
-      card.innerHTML = `<div class="exp-header"><div><div class="exp-title">${title}</div><div class="exp-company">${company}</div></div>${duration?`<span class="exp-date">${duration}</span>`:''}</div><ul class="exp-bullets">${bullets}</ul>`;
-      document.getElementById('expList').appendChild(card);
-    }
-    closeModal();
-  }
 </script>
 </body>
 </html>
